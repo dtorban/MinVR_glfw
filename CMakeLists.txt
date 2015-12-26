@@ -21,7 +21,7 @@ source_group("Header Files" FILES ${HEADERFILES})
 # Download dependencies
 #------------------------------------------
 
-set(glfw_checkout_Dir ${CMAKE_SOURCE_DIR}/lib/glfw)
+set(glfw_checkout_Dir ${CMAKE_SOURCE_DIR}/deps/glfw)
 make_directory(${glfw_checkout_Dir})
 include(ExternalProject)
 
@@ -35,10 +35,6 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	set(glfw_CMAKE_ARGS ${glfw_CMAKE_ARGS} -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD="c++11" -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY="libc++")
 endif()
 
-#   if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-#		set(GIT_EXECUTABLE "C:/Program Files (x86)/Git/bin/git.exe")
-#   endif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-   
 set(glfw_build_dir ${CMAKE_BINARY_DIR}/glfw)
 set(glfw_stamp_dir ${glfw_build_dir}/stamp)
 set(glfw_tmp_dir ${glfw_build_dir}/tmp)
@@ -50,6 +46,8 @@ ExternalProject_add(glfw
 		INSTALL_DIR ${glfw_INSTALL_DIR}
 		CMAKE_ARGS ${glfw_CMAKE_ARGS}
 		UPDATE_COMMAND ""
+		DOWNLOAD_DIR ${glfw_checkout_Dir}
+		SOURCE_DIR ${glfw_checkout_Dir}
 		TMP_DIR ${glfw_tmp_dir}
 		STAMP_DIR ${glfw_stamp_dir}
 		BINARY_DIR ${glfw_build_dir}

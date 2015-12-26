@@ -11,6 +11,8 @@ tramp
 # Build
 *_build
 build
+Makefile
+deps
 
 # VIM
 [._]*.s[a-w][a-z]
