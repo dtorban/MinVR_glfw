@@ -9,6 +9,7 @@ endif()
 
 set (SOURCEFILES 
   main.cpp
+  src/GlfwPlugin.cpp
 )
 
 set (HEADERFILES
