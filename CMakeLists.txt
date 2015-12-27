@@ -163,6 +163,11 @@ add_executable ( GLFW_App ${HEADERFILES} ${SOURCEFILES} )
 target_link_libraries(GLFW_App ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${LIBS_ALL})
 add_dependencies( GLFW_App glfw)
 
+add_definitions(-DPLUGINPATH="${CMAKE_INSTALL_PREFIX}/..")
+add_executable ( test_glfw test/test.cpp )
+target_link_libraries(test_glfw ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} debug VRPlugind optimized VRPlugin ${LIBS_ALL})
+add_dependencies( test_glfw glfw)
+
 SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
 SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}/lib")
