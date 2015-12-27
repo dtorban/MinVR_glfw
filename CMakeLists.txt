@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.8.2)
 set (CMAKE_VERBOSE_MAKEFILE TRUE)
 
-project (GLFW_App)
+project (MinVR_glfw)
 
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set (CMAKE_INSTALL_PREFIX "${${PROJECT_NAME}_SOURCE_DIR}/build/install" CACHE PATH "default install path" FORCE )
@@ -70,14 +70,31 @@ set(OPENGL_INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
 include_directories(${OPENGL_INCLUDE_DIRS})
 
 #------------------------------------------
+# MinVR Dependencies
+#------------------------------------------
+
+if (NOT MinVR_INCLUDE_DIRS)
+	message( FATAL_ERROR "MinVR_INCLUDE_DIRS must be set." )
+endif()
+if (NOT MinVR_BINARY_DIRS)
+	message( FATAL_ERROR "MinVR_BINARY_DIRS must be set." )
+endif()
+
+include_directories(${MinVR_INCLUDE_DIRS})
+link_directories(${MinVR_BINARY_DIRS})
+
+#------------------------------------------
 # Include Directories
 #------------------------------------------
 
-
 # Include Directories
 include_directories (
-  .
+  src
 )
+
+#------------------------------------------
+# Specific preprocessor defines
+#------------------------------------------
 
 # Windows Section #
 if (MSVC)
@@ -102,6 +119,10 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	find_package(X11)
 	set(LIBS_ALL ${LIBS_ALL} ${CMAKE_THREAD_LIBS_INIT} rt Xrandr Xxf86vm Xi m dl ${X11_LIBRARIES})
 endif()
+
+#------------------------------------------
+# Set output directories to lib, and bin
+#------------------------------------------
 
 make_directory(${CMAKE_BINARY_DIR}/lib)
 make_directory(${CMAKE_BINARY_DIR}/bin)
@@ -133,14 +154,26 @@ else()
 	set(CMAKE_BUILD_POSTFIX "")
 endif()
 
+#------------------------------------------
 # Build Target
-add_executable ( ${PROJECT_NAME} ${HEADERFILES} ${SOURCEFILES} )
-set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "d")
+#------------------------------------------
 
+add_executable ( GLFW_App ${HEADERFILES} ${SOURCEFILES} )
+target_link_libraries(GLFW_App ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${LIBS_ALL})
+add_dependencies( GLFW_App glfw)
+
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}/lib")
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+add_library ( ${PROJECT_NAME} SHARED ${HEADERFILES} ${SOURCEFILES} )
 target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${LIBS_ALL})
 add_dependencies( ${PROJECT_NAME} glfw)
 
-#install(DIRECTORY ${PROJECT_NAME}/include/ DESTINATION include)
+#------------------------------------------
+# Install Target
+#------------------------------------------
 
 install( TARGETS ${PROJECT_NAME}
          LIBRARY DESTINATION lib
