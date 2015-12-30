@@ -45,16 +45,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "plugin/PluginInterface.h"
 #include <vector>
 #include <string>
+#include "main/VRPluginInterface.h"
 
 using namespace MinVR;
 using namespace std;
 
-class TestInterface : public MinVR::PluginInterface {
+class TestInterface : public MinVR::VRPluginInterface {
 public:
-	std::string getName() { return "TestInterface"; }
-	const std::type_info& getType() { return typeid(TestInterface); }
-	int getMinVersion() { return getVersion(); }
-	static int getVersion() { return 0; }
+	TestInterface() {}
+	virtual ~TestInterface() {}
+
+	void addVRDisplayDeviceFactory(VRDisplayDeviceFactory* factory) {}
 };
 
 int main(int argc, char **argv) {

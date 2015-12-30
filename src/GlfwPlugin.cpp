@@ -6,10 +6,19 @@
  * 		Dan Orban (dtorban)
  */
 
+#include <GLFW/glfw3.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "plugin/Plugin.h"
 #include <iostream>
+#include "main/VRPluginInterface.h"
 
 namespace MinVR {
+
+static void error_callback(int error, const char* description)
+{
+    fputs(description, stderr);
+}
 
 class GlfwPlugin : public MinVR::Plugin {
 public:
@@ -22,21 +31,26 @@ public:
 	PLUGIN_API bool registerPlugin(MinVR::PluginInterface *iface)
 	{
 		std::cout << "Registering GlfwPlugin with the following interface: " << iface->getName() << std::endl;
-		return true;
 
-		/*VRInputDeviceInterface* inputDeviceInterface = iface->getInterface<VRInputDeviceInterface>();
+		VRPluginInterface* inputDeviceInterface = iface->getInterface<VRPluginInterface>();
 		if (inputDeviceInterface != NULL)
 		{
-			std::cout << "Registering VrpnPlugin with the following interface: " << iface->getName() << std::endl;
-			inputDeviceInterface->addInputDeviceDriver(new VrpnDeviceDriver());
+		    glfwSetErrorCallback(error_callback);
+		    if (!glfwInit())
+		        return false;
+
+			std::cout << "Adding GLFW window factory" << std::endl;
+			inputDeviceInterface->addVRDisplayDeviceFactory(NULL);
 			return true;
 		}
 
-		return false;*/
+		return false;
 	}
 	PLUGIN_API bool unregisterPlugin(MinVR::PluginInterface *iface)
 	{
 		std::cout << "Unregistering GlfwPlugin with the following interface: " << iface->getName() << std::endl;
+        glfwTerminate();
+
 		return true;
 	}
 };
