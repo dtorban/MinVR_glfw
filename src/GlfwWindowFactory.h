@@ -9,12 +9,16 @@
 #ifndef GLFWWINDOWFACTORY_H_
 #define GLFWWINDOWFACTORY_H_
 
+#include "display/VRDisplayDevice.h"
+
 namespace MinVR {
 
-class GlfwWindowFactory {
+class GlfwWindowFactory : public VRDisplayDeviceFactory {
 public:
 	GlfwWindowFactory();
 	virtual ~GlfwWindowFactory();
+
+	std::vector<VRDisplayDevice*> create(const VRDataIndex& config);
 };
 
 } /* namespace MinVR */

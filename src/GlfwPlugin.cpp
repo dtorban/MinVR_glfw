@@ -12,6 +12,7 @@
 #include "plugin/Plugin.h"
 #include <iostream>
 #include "main/VRPluginInterface.h"
+#include "GlfwWindowFactory.h"
 
 namespace MinVR {
 
@@ -40,7 +41,7 @@ public:
 		        return false;
 
 			std::cout << "Adding GLFW window factory" << std::endl;
-			inputDeviceInterface->addVRDisplayDeviceFactory(NULL);
+			inputDeviceInterface->addVRDisplayDeviceFactory(new GlfwWindowFactory());
 			return true;
 		}
 

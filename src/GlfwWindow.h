@@ -9,12 +9,24 @@
 #ifndef GLFWWINDOW_H_
 #define GLFWWINDOW_H_
 
+#include "display/VRDisplayDevice.h"
+#include <GLFW/glfw3.h>
+
 namespace MinVR {
 
-class GlfwWindow {
+class GlfwWindow : public VRDisplayDevice {
 public:
 	GlfwWindow();
 	virtual ~GlfwWindow();
+
+	bool isOpen();
+	void use();
+	void release();
+	void startRendering();
+	void finishRendering();
+
+private:
+	GLFWwindow* window;
 };
 
 } /* namespace MinVR */

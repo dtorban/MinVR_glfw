@@ -7,16 +7,43 @@
  */
 
 #include <GlfwWindow.h>
+#include <iostream>
 
 namespace MinVR {
 
 GlfwWindow::GlfwWindow() {
-	// TODO Auto-generated constructor stub
-
+	window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+	if (!window)
+	{
+		std::cout << "Error creating window." << std::endl;
+	}
+	std::cout << "Created window." << std::endl;
+	glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
 }
 
 GlfwWindow::~GlfwWindow() {
-	// TODO Auto-generated destructor stub
+	glfwDestroyWindow(window);
+}
+
+void GlfwWindow::use() {
+	glfwMakeContextCurrent(window);
+}
+
+void GlfwWindow::release() {
+}
+
+void GlfwWindow::startRendering() {
+	use();
+}
+
+bool GlfwWindow::isOpen() {
+	return !glfwWindowShouldClose(window);
+}
+
+void GlfwWindow::finishRendering() {
+	glfwSwapBuffers(window);
+    glfwPollEvents();
 }
 
 } /* namespace MinVR */

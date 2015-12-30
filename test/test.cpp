@@ -46,16 +46,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <vector>
 #include <string>
 #include "main/VRPluginInterface.h"
+#include "GL/gl.h"
 
 using namespace MinVR;
 using namespace std;
+
+VRDisplayDeviceFactory* displayFactory;
 
 class TestInterface : public MinVR::VRPluginInterface {
 public:
 	TestInterface() {}
 	virtual ~TestInterface() {}
 
-	void addVRDisplayDeviceFactory(VRDisplayDeviceFactory* factory) {}
+	void addVRDisplayDeviceFactory(VRDisplayDeviceFactory* factory) {displayFactory = factory;}
 };
 
 int main(int argc, char **argv) {
@@ -67,4 +70,35 @@ int main(int argc, char **argv) {
   PluginManager pluginManager;
   pluginManager.addInterface(dynamic_cast<TestInterface*>(&iface));
   pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_glfw", "MinVR_glfw");
+
+  VRDataIndex config;
+  VRDisplayDevice* window = displayFactory->create(config)[0];
+
+  while (window->isOpen())
+  {
+	  window->startRendering();
+
+	  float ratio;
+	  int width = 640;
+	  int height = 480;
+	  ratio = width / (float) height;
+	  glViewport(0, 0, width, height);
+	  glClear(GL_COLOR_BUFFER_BIT);
+	  glMatrixMode(GL_PROJECTION);
+	  glLoadIdentity();
+	  glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+	  glMatrixMode(GL_MODELVIEW);
+	  glLoadIdentity();
+	  //glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
+	  glBegin(GL_TRIANGLES);
+	  glColor3f(1.f, 0.f, 0.f);
+	  glVertex3f(-0.6f, -0.4f, 0.f);
+	  glColor3f(0.f, 1.f, 0.f);
+	  glVertex3f(0.6f, -0.4f, 0.f);
+	  glColor3f(0.f, 0.f, 1.f);
+	  glVertex3f(0.f, 0.6f, 0.f);
+	  glEnd();
+
+	  window->finishRendering();
+  }
 }

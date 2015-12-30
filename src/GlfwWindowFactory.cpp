@@ -7,16 +7,22 @@
  */
 
 #include <GlfwWindowFactory.h>
+#include "GlfwWindow.h"
 
 namespace MinVR {
 
 GlfwWindowFactory::GlfwWindowFactory() {
-	// TODO Auto-generated constructor stub
 
 }
 
 GlfwWindowFactory::~GlfwWindowFactory() {
-	// TODO Auto-generated destructor stub
+}
+
+std::vector<VRDisplayDevice*> GlfwWindowFactory::create(
+		const VRDataIndex& config) {
+	std::vector<VRDisplayDevice*> windows;
+	windows.push_back(new GlfwWindow());
+	return windows;
 }
 
 } /* namespace MinVR */
