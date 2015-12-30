@@ -10,11 +10,13 @@ endif()
 set (SOURCEFILES 
   main.cpp
   src/GlfwPlugin.cpp
+  src/GlfwTimer.cpp
   src/GlfwWindow.cpp
   src/GlfwWindowFactory.cpp
 )
 
 set (HEADERFILES
+  src/GlfwTimer.h
   src/GlfwWindow.h
   src/GlfwWindowFactory.h
 )

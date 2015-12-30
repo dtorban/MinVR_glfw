@@ -13,6 +13,7 @@
 #include <iostream>
 #include "main/VRPluginInterface.h"
 #include "GlfwWindowFactory.h"
+#include "GlfwTimer.h"
 
 namespace MinVR {
 
@@ -23,11 +24,19 @@ static void error_callback(int error, const char* description)
 
 class GlfwPlugin : public MinVR::Plugin {
 public:
-	PLUGIN_API GlfwPlugin() {
+	PLUGIN_API GlfwPlugin() : factory(NULL), timer(NULL) {
 		std::cout << "GlfwPlugin created." << std::endl;
 	}
 	PLUGIN_API virtual ~GlfwPlugin() {
 		std::cout << "GlfwPlugin destroyed." << std::endl;
+		if (factory != NULL)
+		{
+			delete factory;
+		}
+		if (timer != NULL)
+		{
+			delete timer;
+		}
 	}
 	PLUGIN_API bool registerPlugin(MinVR::PluginInterface *iface)
 	{
@@ -41,7 +50,10 @@ public:
 		        return false;
 
 			std::cout << "Adding GLFW window factory" << std::endl;
-			inputDeviceInterface->addVRDisplayDeviceFactory(new GlfwWindowFactory());
+			factory = new GlfwWindowFactory();
+			timer = new GlfwTimer();
+			inputDeviceInterface->addVRDisplayDeviceFactory(factory);
+			inputDeviceInterface->addVRTimer(timer);
 			return true;
 		}
 
@@ -54,6 +66,10 @@ public:
 
 		return true;
 	}
+
+private:
+	GlfwWindowFactory* factory;
+	GlfwTimer* timer;
 };
 
 }

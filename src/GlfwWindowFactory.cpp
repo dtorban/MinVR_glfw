@@ -12,17 +12,22 @@
 namespace MinVR {
 
 GlfwWindowFactory::GlfwWindowFactory() {
-
 }
 
 GlfwWindowFactory::~GlfwWindowFactory() {
+	for (int f = 0; f < windows.size(); f++)
+	{
+		delete windows[f];
+	}
 }
 
 std::vector<VRDisplayDevice*> GlfwWindowFactory::create(
 		const VRDataIndex& config) {
-	std::vector<VRDisplayDevice*> windows;
-	windows.push_back(new GlfwWindow());
-	return windows;
+	std::vector<VRDisplayDevice*> newWindows;
+	VRDisplayDevice* window = new GlfwWindow();
+	newWindows.push_back(window);
+	windows.push_back(window);
+	return newWindows;
 }
 
 } /* namespace MinVR */

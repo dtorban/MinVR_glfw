@@ -47,11 +47,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <string>
 #include "main/VRPluginInterface.h"
 #include "GL/gl.h"
+#include "main/VRTimer.h"
 
 using namespace MinVR;
 using namespace std;
 
 VRDisplayDeviceFactory* displayFactory;
+VRTimer* mainTimer;
 
 class TestInterface : public MinVR::VRPluginInterface {
 public:
@@ -59,6 +61,7 @@ public:
 	virtual ~TestInterface() {}
 
 	void addVRDisplayDeviceFactory(VRDisplayDeviceFactory* factory) {displayFactory = factory;}
+	void addVRTimer(VRTimer* timer) { mainTimer = timer; }
 };
 
 int main(int argc, char **argv) {
@@ -89,7 +92,7 @@ int main(int argc, char **argv) {
 	  glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
 	  glMatrixMode(GL_MODELVIEW);
 	  glLoadIdentity();
-	  //glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
+	  glRotatef((float) mainTimer->getTime() * 50.f, 0.f, 0.f, 1.f);
 	  glBegin(GL_TRIANGLES);
 	  glColor3f(1.f, 0.f, 0.f);
 	  glVertex3f(-0.6f, -0.4f, 0.f);

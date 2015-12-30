@@ -6,24 +6,22 @@
  * 		Dan Orban (dtorban)
  */
 
-#ifndef GLFWWINDOWFACTORY_H_
-#define GLFWWINDOWFACTORY_H_
+#ifndef GLFWTIMER_H_
+#define GLFWTIMER_H_
 
-#include "display/VRDisplayDevice.h"
+#include "main/VRTimer.h"
 
 namespace MinVR {
 
-class GlfwWindowFactory : public VRDisplayDeviceFactory {
+class GlfwTimer : public VRTimer {
 public:
-	GlfwWindowFactory();
-	virtual ~GlfwWindowFactory();
+	GlfwTimer();
+	virtual ~GlfwTimer();
 
-	std::vector<VRDisplayDevice*> create(const VRDataIndex& config);
-
-private:
-	std::vector<VRDisplayDevice*> windows;
+	std::string getName();
+	double getTime();
 };
 
 } /* namespace MinVR */
 
-#endif /* GLFWWINDOWFACTORY_H_ */
+#endif /* GLFWTIMER_H_ */
