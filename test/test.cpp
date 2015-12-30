@@ -53,6 +53,7 @@ using namespace MinVR;
 using namespace std;
 
 VRDisplayDeviceFactory* displayFactory;
+VRInputDeviceFactory* inputDeviceFactory;
 VRTimer* mainTimer;
 
 class TestInterface : public MinVR::VRPluginInterface {
@@ -61,6 +62,7 @@ public:
 	virtual ~TestInterface() {}
 
 	void addVRDisplayDeviceFactory(VRDisplayDeviceFactory* factory) {displayFactory = factory;}
+	void addVRInputDeviceFactory(VRInputDeviceFactory* factory) { inputDeviceFactory = factory; }
 	void addVRTimer(VRTimer* timer) { mainTimer = timer; }
 };
 
@@ -77,8 +79,20 @@ int main(int argc, char **argv) {
   VRDataIndex config;
   VRDisplayDevice* window = displayFactory->create(config)[0];
 
+  VRInputDevice* inputDevice = inputDeviceFactory->create(config)[0];
+
+  VRDataQueue dataQueue;
+
   while (window->isOpen())
   {
+	  inputDevice->appendNewInputEventsSinceLastCall(dataQueue);
+
+	  while (dataQueue.notEmpty())
+	  {
+		  cout << dataQueue.getSerializedObject() << endl;
+		  dataQueue.pop();
+	  }
+
 	  window->startRendering();
 
 	  float ratio;

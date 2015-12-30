@@ -9,6 +9,7 @@ endif()
 
 set (SOURCEFILES 
   main.cpp
+  src/GlfwInputDevice.cpp
   src/GlfwPlugin.cpp
   src/GlfwTimer.cpp
   src/GlfwWindow.cpp
@@ -16,6 +17,7 @@ set (SOURCEFILES
 )
 
 set (HEADERFILES
+  src/GlfwInputDevice.h
   src/GlfwTimer.h
   src/GlfwWindow.h
   src/GlfwWindowFactory.h
@@ -165,7 +167,7 @@ endif()
 #------------------------------------------
 
 add_executable ( GLFW_App ${HEADERFILES} ${SOURCEFILES} )
-target_link_libraries(GLFW_App ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${LIBS_ALL})
+target_link_libraries(GLFW_App ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} debug VRPlugind optimized VRPlugin debug VRIndexd optimized VRIndex ${LIBS_ALL})
 add_dependencies( GLFW_App glfw)
 
 add_definitions(-DPLUGINPATH="${CMAKE_INSTALL_PREFIX}/..")
@@ -178,7 +180,7 @@ SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}/lib")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_library ( ${PROJECT_NAME} SHARED ${HEADERFILES} ${SOURCEFILES} )
-target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${LIBS_ALL})
+target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} debug VRPlugind optimized VRPlugin debug VRIndexd optimized VRIndex ${LIBS_ALL})
 add_dependencies( ${PROJECT_NAME} glfw)
 
 #------------------------------------------

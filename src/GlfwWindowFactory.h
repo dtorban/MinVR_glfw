@@ -10,6 +10,7 @@
 #define GLFWWINDOWFACTORY_H_
 
 #include "display/VRDisplayDevice.h"
+#include "GlfwInputDevice.h"
 
 namespace MinVR {
 
@@ -22,6 +23,7 @@ public:
 
 private:
 	std::vector<VRDisplayDevice*> windows;
+	GlfwInputDevice* inputDevice;
 };
 
 } /* namespace MinVR */

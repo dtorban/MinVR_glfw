@@ -13,6 +13,7 @@
 #include <iostream>
 #include "main/VRPluginInterface.h"
 #include "GlfwWindowFactory.h"
+#include "GlfwInputDevice.h"
 #include "GlfwTimer.h"
 
 namespace MinVR {
@@ -24,36 +25,31 @@ static void error_callback(int error, const char* description)
 
 class GlfwPlugin : public MinVR::Plugin {
 public:
-	PLUGIN_API GlfwPlugin() : factory(NULL), timer(NULL) {
+	PLUGIN_API GlfwPlugin() : displayFactory(NULL), inputDeviceFactory(NULL), inputDevice(NULL), timer(NULL) {
 		std::cout << "GlfwPlugin created." << std::endl;
 	}
 	PLUGIN_API virtual ~GlfwPlugin() {
 		std::cout << "GlfwPlugin destroyed." << std::endl;
-		if (factory != NULL)
-		{
-			delete factory;
-		}
-		if (timer != NULL)
-		{
-			delete timer;
-		}
 	}
 	PLUGIN_API bool registerPlugin(MinVR::PluginInterface *iface)
 	{
 		std::cout << "Registering GlfwPlugin with the following interface: " << iface->getName() << std::endl;
 
-		VRPluginInterface* inputDeviceInterface = iface->getInterface<VRPluginInterface>();
-		if (inputDeviceInterface != NULL)
+		VRPluginInterface* vrInterface = iface->getInterface<VRPluginInterface>();
+		if (vrInterface != NULL)
 		{
 		    glfwSetErrorCallback(error_callback);
 		    if (!glfwInit())
 		        return false;
 
 			std::cout << "Adding GLFW window factory" << std::endl;
-			factory = new GlfwWindowFactory();
+			displayFactory = new GlfwWindowFactory();
+			inputDevice = new GlfwInputDevice();
+			inputDeviceFactory = new GlfwInputDeviceFactory(inputDevice);
 			timer = new GlfwTimer();
-			inputDeviceInterface->addVRDisplayDeviceFactory(factory);
-			inputDeviceInterface->addVRTimer(timer);
+			vrInterface->addVRDisplayDeviceFactory(displayFactory);
+			vrInterface->addVRInputDeviceFactory(inputDeviceFactory);
+			vrInterface->addVRTimer(timer);
 			return true;
 		}
 
@@ -62,14 +58,34 @@ public:
 	PLUGIN_API bool unregisterPlugin(MinVR::PluginInterface *iface)
 	{
 		std::cout << "Unregistering GlfwPlugin with the following interface: " << iface->getName() << std::endl;
+
+		if (displayFactory != NULL)
+		{
+			delete displayFactory;
+		}
+		if (inputDeviceFactory != NULL)
+		{
+			delete inputDeviceFactory;
+		}
+		if (inputDevice != NULL)
+		{
+			delete inputDevice;
+		}
+		if (timer != NULL)
+		{
+			delete timer;
+		}
+
         glfwTerminate();
 
 		return true;
 	}
 
 private:
-	GlfwWindowFactory* factory;
+	GlfwWindowFactory* displayFactory;
+	GlfwInputDeviceFactory* inputDeviceFactory;
 	GlfwTimer* timer;
+	GlfwInputDevice* inputDevice;
 };
 
 }
