@@ -25,6 +25,10 @@ public:
 	void startRendering();
 	void finishRendering();
 
+	GLFWwindow* getWindow() const {
+		return window;
+	}
+
 private:
 	GLFWwindow* window;
 };

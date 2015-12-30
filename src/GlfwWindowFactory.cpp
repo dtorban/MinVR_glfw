@@ -11,7 +11,7 @@
 
 namespace MinVR {
 
-GlfwWindowFactory::GlfwWindowFactory() {
+GlfwWindowFactory::GlfwWindowFactory(GlfwInputDevice* iDevice) : inputDevice(iDevice) {
 }
 
 GlfwWindowFactory::~GlfwWindowFactory() {
@@ -24,7 +24,8 @@ GlfwWindowFactory::~GlfwWindowFactory() {
 std::vector<VRDisplayDevice*> GlfwWindowFactory::create(
 		const VRDataIndex& config) {
 	std::vector<VRDisplayDevice*> newWindows;
-	VRDisplayDevice* window = new GlfwWindow();
+	GlfwWindow* window = new GlfwWindow();
+	inputDevice->registerGlfwWindow(window);
 	newWindows.push_back(window);
 	windows.push_back(window);
 	return newWindows;

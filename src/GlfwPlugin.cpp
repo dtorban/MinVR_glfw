@@ -43,8 +43,8 @@ public:
 		        return false;
 
 			std::cout << "Adding GLFW window factory" << std::endl;
-			displayFactory = new GlfwWindowFactory();
 			inputDevice = new GlfwInputDevice();
+			displayFactory = new GlfwWindowFactory(inputDevice);
 			inputDeviceFactory = new GlfwInputDeviceFactory(inputDevice);
 			timer = new GlfwTimer();
 			vrInterface->addVRDisplayDeviceFactory(displayFactory);

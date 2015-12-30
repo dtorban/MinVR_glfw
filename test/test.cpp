@@ -82,14 +82,27 @@ int main(int argc, char **argv) {
   VRInputDevice* inputDevice = inputDeviceFactory->create(config)[0];
 
   VRDataQueue dataQueue;
+  VRDataIndex dataIndex;
 
-  while (window->isOpen())
+  bool isRunning = true;
+
+  while (window->isOpen() && isRunning)
   {
 	  inputDevice->appendNewInputEventsSinceLastCall(dataQueue);
 
 	  while (dataQueue.notEmpty())
 	  {
-		  cout << dataQueue.getSerializedObject() << endl;
+		 // cout << dataQueue.getSerializedObject() << endl;
+		  std::string p = dataIndex.addSerializedValue( dataQueue.getSerializedObject() );
+		  if (p == "/keyboard")
+		  {
+			  std::string val = dataIndex.getValue("value", p);
+			  if (val == "ESC_down")
+			  {
+				  isRunning = false;
+			  }
+			  cout << val << endl;
+		  }
 		  dataQueue.pop();
 	  }
 

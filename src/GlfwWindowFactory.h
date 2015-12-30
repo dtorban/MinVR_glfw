@@ -16,7 +16,7 @@ namespace MinVR {
 
 class GlfwWindowFactory : public VRDisplayDeviceFactory {
 public:
-	GlfwWindowFactory();
+	GlfwWindowFactory(GlfwInputDevice* inputDevice);
 	virtual ~GlfwWindowFactory();
 
 	std::vector<VRDisplayDevice*> create(const VRDataIndex& config);
