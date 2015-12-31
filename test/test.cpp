@@ -69,17 +69,6 @@ public:
 
 void renderTriangle();
 
-class Renderer : public VRRenderer {
-public:
-	Renderer() {}
-	virtual ~Renderer() {}
-
-	void render() const
-	{
-		renderTriangle();
-	}
-};
-
 int main(int argc, char **argv) {
   cout << "Registering plugins..." << endl;
   cout << "Plugin path: " << PLUGINPATH << endl;
@@ -122,9 +111,7 @@ int main(int argc, char **argv) {
 		  dataQueue.pop();
 	  }
 
-	  window->startRendering(renderer);
-	  //viewport->startRendering(renderer);
-
+	  window->startRendering(renderTriangle);
 	  window->finishRendering();
   }
 }
