@@ -33,9 +33,19 @@ void GlfwWindow::use() {
 void GlfwWindow::release() {
 }
 
-void GlfwWindow::startRendering(const MinVR::VRRenderer& renderer) {
+void GlfwWindow::startRendering(const MinVR::VRRenderer& renderer, int x) {
 	use();
-	renderer.render();
+	if (subDisplays.size() > 0)
+	{
+		for (int f = 0; f < subDisplays.size(); f++)
+		{
+			VRDisplayDevice::startRendering(subDisplays[f], renderer, 1);
+		}
+	}
+	else
+	{
+		renderer.render();
+	}
 }
 
 bool GlfwWindow::isOpen() {
@@ -43,8 +53,17 @@ bool GlfwWindow::isOpen() {
 }
 
 void GlfwWindow::finishRendering() {
+	for (int f = 0; f < subDisplays.size(); f++)
+	{
+		subDisplays[f]->finishRendering();
+	}
+
 	glfwSwapBuffers(window);
     glfwPollEvents();
+}
+
+void GlfwWindow::addSubDisplay(VRDisplayDevice* display) {
+	subDisplays.push_back(display);
 }
 
 } /* namespace MinVR */

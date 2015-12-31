@@ -53,7 +53,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using namespace MinVR;
 using namespace std;
 
-VRDisplayDeviceFactory* displayFactory;
+std::vector<VRDisplayDeviceFactory*> displayFactories;
 VRInputDeviceFactory* inputDeviceFactory;
 VRTimer* mainTimer;
 
@@ -62,10 +62,12 @@ public:
 	TestInterface() {}
 	virtual ~TestInterface() {}
 
-	void addVRDisplayDeviceFactory(VRDisplayDeviceFactory* factory) {displayFactory = factory;}
+	void addVRDisplayDeviceFactory(VRDisplayDeviceFactory* factory) {displayFactories.push_back(factory);}
 	void addVRInputDeviceFactory(VRInputDeviceFactory* factory) { inputDeviceFactory = factory; }
 	void addVRTimer(VRTimer* timer) { mainTimer = timer; }
 };
+
+void renderTriangle();
 
 class Renderer : public VRRenderer {
 public:
@@ -74,26 +76,7 @@ public:
 
 	void render() const
 	{
-		  float ratio;
-		  int width = 640;
-		  int height = 480;
-		  ratio = width / (float) height;
-		  //glViewport(0, 0, width, height);
-		  glClear(GL_COLOR_BUFFER_BIT);
-		  glMatrixMode(GL_PROJECTION);
-		  glLoadIdentity();
-		  glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-		  glMatrixMode(GL_MODELVIEW);
-		  glLoadIdentity();
-		  glRotatef((float) mainTimer->getTime() * 50.f, 0.f, 0.f, 1.f);
-		  glBegin(GL_TRIANGLES);
-		  glColor3f(1.f, 0.f, 0.f);
-		  glVertex3f(-0.6f, -0.4f, 0.f);
-		  glColor3f(0.f, 1.f, 0.f);
-		  glVertex3f(0.6f, -0.4f, 0.f);
-		  glColor3f(0.f, 0.f, 1.f);
-		  glVertex3f(0.f, 0.6f, 0.f);
-		  glEnd();
+		renderTriangle();
 	}
 };
 
@@ -106,9 +89,11 @@ int main(int argc, char **argv) {
   PluginManager pluginManager;
   pluginManager.addInterface(dynamic_cast<TestInterface*>(&iface));
   pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_glfw", "MinVR_glfw");
+  pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_OpenGL", "MinVR_OpenGL");
 
   VRDataIndex config;
-  VRDisplayDevice* window = displayFactory->create(config, "", displayFactory)[0];
+  VRDisplayDevice* window = displayFactories[0]->create(config, "", displayFactories[1])[0];
+  //VRDisplayDevice* viewport = displayFactories[1]->create(config, "", displayFactories[1])[0];
 
   VRInputDevice* inputDevice = inputDeviceFactory->create(config)[0];
 
@@ -138,7 +123,32 @@ int main(int argc, char **argv) {
 	  }
 
 	  window->startRendering(renderer);
+	  //viewport->startRendering(renderer);
 
 	  window->finishRendering();
   }
+}
+
+void renderTriangle()
+{
+	  float ratio;
+	  int width = 640;
+	  int height = 480;
+	  ratio = width / (float) height;
+	  //glViewport(0, 0, width, height);
+	  glClear(GL_COLOR_BUFFER_BIT);
+	  glMatrixMode(GL_PROJECTION);
+	  glLoadIdentity();
+	  glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+	  glMatrixMode(GL_MODELVIEW);
+	  glLoadIdentity();
+	  glRotatef((float) mainTimer->getTime() * 50.f, 0.f, 0.f, 1.f);
+	  glBegin(GL_TRIANGLES);
+	  glColor3f(1.f, 0.f, 0.f);
+	  glVertex3f(-0.6f, -0.4f, 0.f);
+	  glColor3f(0.f, 1.f, 0.f);
+	  glVertex3f(0.6f, -0.4f, 0.f);
+	  glColor3f(0.f, 0.f, 1.f);
+	  glVertex3f(0.f, 0.6f, 0.f);
+	  glEnd();
 }
