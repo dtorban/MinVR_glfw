@@ -48,6 +48,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "main/VRPluginInterface.h"
 #include "GL/gl.h"
 #include "main/VRTimer.h"
+#include "display/VRRenderer.h"
 
 using namespace MinVR;
 using namespace std;
@@ -66,6 +67,36 @@ public:
 	void addVRTimer(VRTimer* timer) { mainTimer = timer; }
 };
 
+class Renderer : public VRRenderer {
+public:
+	Renderer() {}
+	virtual ~Renderer() {}
+
+	void render() const
+	{
+		  float ratio;
+		  int width = 640;
+		  int height = 480;
+		  ratio = width / (float) height;
+		  //glViewport(0, 0, width, height);
+		  glClear(GL_COLOR_BUFFER_BIT);
+		  glMatrixMode(GL_PROJECTION);
+		  glLoadIdentity();
+		  glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+		  glMatrixMode(GL_MODELVIEW);
+		  glLoadIdentity();
+		  glRotatef((float) mainTimer->getTime() * 50.f, 0.f, 0.f, 1.f);
+		  glBegin(GL_TRIANGLES);
+		  glColor3f(1.f, 0.f, 0.f);
+		  glVertex3f(-0.6f, -0.4f, 0.f);
+		  glColor3f(0.f, 1.f, 0.f);
+		  glVertex3f(0.6f, -0.4f, 0.f);
+		  glColor3f(0.f, 0.f, 1.f);
+		  glVertex3f(0.f, 0.6f, 0.f);
+		  glEnd();
+	}
+};
+
 int main(int argc, char **argv) {
   cout << "Registering plugins..." << endl;
   cout << "Plugin path: " << PLUGINPATH << endl;
@@ -77,12 +108,13 @@ int main(int argc, char **argv) {
   pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_glfw", "MinVR_glfw");
 
   VRDataIndex config;
-  VRDisplayDevice* window = displayFactory->create(config)[0];
+  VRDisplayDevice* window = displayFactory->create(config, "", displayFactory)[0];
 
   VRInputDevice* inputDevice = inputDeviceFactory->create(config)[0];
 
   VRDataQueue dataQueue;
   VRDataIndex dataIndex;
+  Renderer renderer;
 
   bool isRunning = true;
 
@@ -92,7 +124,6 @@ int main(int argc, char **argv) {
 
 	  while (dataQueue.notEmpty())
 	  {
-		 // cout << dataQueue.getSerializedObject() << endl;
 		  std::string p = dataIndex.addSerializedValue( dataQueue.getSerializedObject() );
 		  if (p == "/keyboard")
 		  {
@@ -106,28 +137,7 @@ int main(int argc, char **argv) {
 		  dataQueue.pop();
 	  }
 
-	  window->startRendering();
-
-	  float ratio;
-	  int width = 640;
-	  int height = 480;
-	  ratio = width / (float) height;
-	  glViewport(0, 0, width, height);
-	  glClear(GL_COLOR_BUFFER_BIT);
-	  glMatrixMode(GL_PROJECTION);
-	  glLoadIdentity();
-	  glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-	  glMatrixMode(GL_MODELVIEW);
-	  glLoadIdentity();
-	  glRotatef((float) mainTimer->getTime() * 50.f, 0.f, 0.f, 1.f);
-	  glBegin(GL_TRIANGLES);
-	  glColor3f(1.f, 0.f, 0.f);
-	  glVertex3f(-0.6f, -0.4f, 0.f);
-	  glColor3f(0.f, 1.f, 0.f);
-	  glVertex3f(0.6f, -0.4f, 0.f);
-	  glColor3f(0.f, 0.f, 1.f);
-	  glVertex3f(0.f, 0.6f, 0.f);
-	  glEnd();
+	  window->startRendering(renderer);
 
 	  window->finishRendering();
   }

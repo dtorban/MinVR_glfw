@@ -33,8 +33,9 @@ void GlfwWindow::use() {
 void GlfwWindow::release() {
 }
 
-void GlfwWindow::startRendering() {
+void GlfwWindow::startRendering(const MinVR::VRRenderer& renderer) {
 	use();
+	renderer.render();
 }
 
 bool GlfwWindow::isOpen() {

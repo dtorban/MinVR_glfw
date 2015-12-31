@@ -22,7 +22,7 @@ public:
 	bool isOpen();
 	void use();
 	void release();
-	void startRendering();
+	void startRendering(const MinVR::VRRenderer& renderer);
 	void finishRendering();
 
 	GLFWwindow* getWindow() const {

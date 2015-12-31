@@ -22,7 +22,7 @@ GlfwWindowFactory::~GlfwWindowFactory() {
 }
 
 std::vector<VRDisplayDevice*> GlfwWindowFactory::create(
-		const VRDataIndex& config) {
+		const VRDataIndex& config, const std::string nameSpace, VRDisplayDeviceFactory* factory) {
 	std::vector<VRDisplayDevice*> newWindows;
 	GlfwWindow* window = new GlfwWindow();
 	inputDevice->registerGlfwWindow(window);

@@ -19,7 +19,7 @@ public:
 	GlfwWindowFactory(GlfwInputDevice* inputDevice);
 	virtual ~GlfwWindowFactory();
 
-	std::vector<VRDisplayDevice*> create(const VRDataIndex& config);
+	std::vector<VRDisplayDevice*> create(const VRDataIndex& config, const std::string nameSpace, VRDisplayDeviceFactory* factory);
 
 private:
 	std::vector<VRDisplayDevice*> windows;
