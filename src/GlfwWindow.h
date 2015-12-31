@@ -20,8 +20,7 @@ public:
 	virtual ~GlfwWindow();
 
 	bool isOpen();
-	void use();
-	void release();
+	void use(const MinVR::VRDisplayAction& action);
 	void finishRendering();
 
 	GLFWwindow* getWindow() const {

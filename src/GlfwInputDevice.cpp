@@ -23,12 +23,13 @@ GlfwInputDevice::~GlfwInputDevice() {
 }
 
 void GlfwInputDevice::appendNewInputEventsSinceLastCall(VRDataQueue& queue) {
-	  for (int f = 0; f < events.size(); f++)
-	  {
-		  queue.push(events[f]);
-	  }
+    glfwPollEvents();
+    for (int f = 0; f < events.size(); f++)
+    {
+    	queue.push(events[f]);
+    }
 
-	  events.clear();
+    events.clear();
 }
 
 void GlfwInputDevice::keyCallback(GLFWwindow* window, int key, int scancode,

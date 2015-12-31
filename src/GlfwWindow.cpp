@@ -26,15 +26,13 @@ GlfwWindow::~GlfwWindow() {
 	glfwDestroyWindow(window);
 }
 
-void GlfwWindow::use() {
+void GlfwWindow::use(const MinVR::VRDisplayAction& action) {
 	glfwMakeContextCurrent(window);
-}
-
-void GlfwWindow::release() {
+	action.exec();
 }
 
 void GlfwWindow::startRendering(const MinVR::VRRenderer& renderer, int x) {
-	use();
+	glfwMakeContextCurrent(window);
 	if (subDisplays.size() > 0)
 	{
 		for (int f = 0; f < subDisplays.size(); f++)
@@ -59,7 +57,6 @@ void GlfwWindow::finishRendering() {
 	}
 
 	glfwSwapBuffers(window);
-    glfwPollEvents();
 }
 
 void GlfwWindow::addSubDisplay(VRDisplayDevice* display) {

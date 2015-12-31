@@ -88,7 +88,6 @@ int main(int argc, char **argv) {
 
   VRDataQueue dataQueue;
   VRDataIndex dataIndex;
-  Renderer renderer;
 
   bool isRunning = true;
 
@@ -111,8 +110,7 @@ int main(int argc, char **argv) {
 		  dataQueue.pop();
 	  }
 
-	  window->startRendering(renderTriangle);
-	  window->finishRendering();
+	  window->render(renderTriangle);
   }
 }
 
