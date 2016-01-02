@@ -16,7 +16,7 @@ namespace MinVR {
 
 class GlfwWindow : public VRDisplayDevice {
 public:
-	GlfwWindow();
+	GlfwWindow(int x, int y, int width, int height);
 	virtual ~GlfwWindow();
 
 	bool isOpen();

@@ -11,8 +11,8 @@
 
 namespace MinVR {
 
-GlfwWindow::GlfwWindow() {
-	window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+GlfwWindow::GlfwWindow(int x, int y, int width, int height) {
+	window = glfwCreateWindow(width, height, "Simple example", NULL, NULL);
 	if (!window)
 	{
 		std::cout << "Error creating window." << std::endl;
