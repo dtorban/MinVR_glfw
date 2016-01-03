@@ -23,10 +23,12 @@ VRDisplayDevice* GlfwWindowFactory::createDisplay(const std::string type, const 
 		VRDataIndex& config, VRDisplayDeviceFactory* factory) {
 	if (type == "glfw_display")
 	{
+		int xOffset = config.getValue("xOffset", name);
+		int yOffset = config.getValue("yOffset", name);
 		int width = config.getValue("width", name);
 		int height = config.getValue("height", name);
 
-		GlfwWindow* window = new GlfwWindow(0, 0, width, height);
+		GlfwWindow* window = new GlfwWindow(xOffset, yOffset, width, height);
 		inputDevice->registerGlfwWindow(window);
 
 		return window;

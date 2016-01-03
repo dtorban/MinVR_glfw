@@ -18,6 +18,7 @@ GlfwWindow::GlfwWindow(int x, int y, int width, int height) {
 		std::cout << "Error creating window." << std::endl;
 	}
 	std::cout << "Created window." << std::endl;
+	glfwSetWindowPos(window, x, y);
 	glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 }

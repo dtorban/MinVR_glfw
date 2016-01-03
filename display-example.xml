@@ -14,12 +14,15 @@
   <MainDisplay>
     <port type="int">3</port>
     <displayType type="string">glfw_display</DisplayType>
+    <xOffset type="int">0</xOffset>
+    <yOffset type="int">200</yOffset>
     <width type="int">640</width>
     <height type="int">480</height>
   </MainDisplay>
   <OtherDisplay>
-    <port type="int">3</port>
     <displayType type="string">glfw_display</DisplayType>
+    <xOffset type="int">0</xOffset>
+    <yOffset type="int">50</yOffset>
     <width type="int">600</width>
     <height type="int">600</height>
     <stereoFormatter>
