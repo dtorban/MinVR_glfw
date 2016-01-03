@@ -14,15 +14,14 @@
 
 namespace MinVR {
 
-class GlfwWindowFactory : public VRDisplayDeviceFactory {
+class GlfwWindowFactory : public SimpleVRDisplayFactory {
 public:
 	GlfwWindowFactory(GlfwInputDevice* inputDevice);
 	virtual ~GlfwWindowFactory();
 
-	std::vector<VRDisplayDevice*> create(VRDataIndex& config, const std::string nameSpace, VRDisplayDeviceFactory* factory);
+	VRDisplayDevice* createDisplay(const std::string type, const std::string name, VRDataIndex& config, VRDisplayDeviceFactory* factory);
 
 private:
-	std::vector<VRDisplayDevice*> windows;
 	GlfwInputDevice* inputDevice;
 };
 
