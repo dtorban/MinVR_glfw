@@ -31,21 +31,21 @@ void GlfwWindow::use(const MinVR::VRDisplayAction& action) {
 	action.exec();
 }
 
+int GlfwWindow::getWidth() {
+	int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+	return width;
+}
+
+int GlfwWindow::getHeight() {
+	int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+	return height;
+}
+
 void GlfwWindow::startRendering(const MinVR::VRRenderer& renderer, int x) {
 	glfwMakeContextCurrent(window);
-
-	std::vector<VRDisplayDevice*> subDisplays = getSubDisplays();
-	if (subDisplays.size() > 0)
-	{
-		for (int f = 0; f < subDisplays.size(); f++)
-		{
-			VRDisplayDevice::startRendering(subDisplays[f], renderer, 1);
-		}
-	}
-	else
-	{
-		renderer.render();
-	}
+	startRenderingAllDisplays(renderer, x);
 }
 
 bool GlfwWindow::isOpen() {
@@ -53,11 +53,7 @@ bool GlfwWindow::isOpen() {
 }
 
 void GlfwWindow::finishRendering() {
-	std::vector<VRDisplayDevice*> subDisplays = getSubDisplays();
-	for (int f = 0; f < subDisplays.size(); f++)
-	{
-		subDisplays[f]->finishRendering();
-	}
+	finishRenderingAllDisplays();
 
 	glfwSwapBuffers(window);
 }

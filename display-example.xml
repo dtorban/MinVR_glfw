@@ -20,13 +20,32 @@
   <OtherDisplay>
     <port type="int">3</port>
     <displayType type="string">glfw_display</DisplayType>
-    <width type="int">500</width>
-    <height type="int">500</height>
+    <width type="int">600</width>
+    <height type="int">600</height>
+	  <steroFormatter>
+	    <displayType type="string">sideBySideStereo</DisplayType>
+
     <topViewport>
           <displayType type="string">viewport</DisplayType>
-          <width type="int">100</width>
-	  <height type="int">100</height>
+	  <xOffset type="int">0</xOffset>
+	  <yOffset type="int">300</yOffset>
+	  <width type="int">600</width>
+	  <height type="int">300</height>
+	  <steroFormatter>
+	    <displayType type="string">sideBySideStereo2</DisplayType>
+	  </steroFormatter>
     </topViewport>
+    <bottomViewport>
+          <displayType type="string">viewport</DisplayType>
+	  <xOffset type="int">0</xOffset>
+	  <yOffset type="int">0</yOffset>
+	  <width type="int">600</width>
+	  <height type="int">300</height>
+	  <steroFormatter>
+	    <displayType type="string">sideBySideStereo2</DisplayType>
+	  </steroFormatter>
+    </bottomViewport>
+	  </steroFormatter>
   </OtherDisplay>
 </VRDisplayDevices>
 

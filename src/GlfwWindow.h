@@ -19,6 +19,9 @@ public:
 	GlfwWindow(int x, int y, int width, int height);
 	virtual ~GlfwWindow();
 
+	int getWidth();
+	int getHeight();
+
 	bool isOpen();
 	void use(const MinVR::VRDisplayAction& action);
 	void finishRendering();
