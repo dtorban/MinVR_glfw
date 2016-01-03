@@ -29,12 +29,6 @@ VRDisplayDevice* GlfwWindowFactory::createDisplay(const std::string type, const 
 		GlfwWindow* window = new GlfwWindow(0, 0, width, height);
 		inputDevice->registerGlfwWindow(window);
 
-		std::vector<VRDisplayDevice*> subDisplays = factory->create(config, name, factory);
-		for (int f = 0; f < subDisplays.size(); f++)
-		{
-			window->addSubDisplay(subDisplays[f]);
-		}
-
 		return window;
 	}
 

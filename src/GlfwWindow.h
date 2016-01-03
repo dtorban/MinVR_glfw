@@ -27,14 +27,14 @@ public:
 		return window;
 	}
 
-	void addSubDisplay(VRDisplayDevice* display);
+	//void addSubDisplay(VRDisplayDevice* display);
 
 protected:
 	void startRendering(const MinVR::VRRenderer& renderer, int x);
 
 private:
 	GLFWwindow* window;
-	std::vector<VRDisplayDevice*> subDisplays;
+	//std::vector<VRDisplayDevice*> subDisplays;
 };
 
 } /* namespace MinVR */
