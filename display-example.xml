@@ -22,30 +22,22 @@
     <displayType type="string">glfw_display</DisplayType>
     <width type="int">600</width>
     <height type="int">600</height>
-	  <steroFormatter>
-	    <displayType type="string">sideBySideStereo</DisplayType>
-
-    <topViewport>
+    <stereoFormatter>
+       <displayType type="string">sideBySideStereo</DisplayType>
+       <topViewport>
           <displayType type="string">viewport</DisplayType>
 	  <xOffset type="int">0</xOffset>
 	  <yOffset type="int">300</yOffset>
-	  <width type="int">600</width>
+	  <width type="int">300</width>
 	  <height type="int">300</height>
-	  <steroFormatter>
-	    <displayType type="string">sideBySideStereo2</DisplayType>
-	  </steroFormatter>
-    </topViewport>
-    <bottomViewport>
+       </topViewport>
+       <bottomViewport>
           <displayType type="string">viewport</DisplayType>
 	  <xOffset type="int">0</xOffset>
 	  <yOffset type="int">0</yOffset>
-	  <width type="int">600</width>
+	  <width type="int">300</width>
 	  <height type="int">300</height>
-	  <steroFormatter>
-	    <displayType type="string">sideBySideStereo2</DisplayType>
-	  </steroFormatter>
-    </bottomViewport>
-	  </steroFormatter>
+       </bottomViewport>
   </OtherDisplay>
 </VRDisplayDevices>
 
