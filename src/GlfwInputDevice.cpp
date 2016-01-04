@@ -54,9 +54,9 @@ std::vector<VRInputDevice*> GlfwInputDeviceFactory::create(
 	return devices;
 }
 
-void GlfwInputDevice::registerGlfwWindow(GlfwWindow* window) {
-	glfwSetWindowUserPointer(window->getWindow(), this);
-	glfwSetKeyCallback(window->getWindow(), glfw_key_callback);
+void GlfwInputDevice::registerGlfwWindow(GLFWwindow* window) {
+	glfwSetWindowUserPointer(window, this);
+	glfwSetKeyCallback(window, glfw_key_callback);
 }
 
 std::string getGlfwKeyName(int key)

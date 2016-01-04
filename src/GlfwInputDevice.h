@@ -10,7 +10,6 @@
 #define GLFWINPUTDEVICE_H_
 
 #include "event/VRInputDevice.h"
-#include "GlfwWindow.h"
 #include <vector>
 #include <GLFW/glfw3.h>
 
@@ -22,7 +21,7 @@ public:
 	virtual ~GlfwInputDevice();
 
 	void appendNewInputEventsSinceLastCall(VRDataQueue& queue);
-	void registerGlfwWindow(GlfwWindow* window);
+	void registerGlfwWindow(GLFWwindow* window);
 
 	void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 

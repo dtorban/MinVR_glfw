@@ -89,6 +89,11 @@ int main(int argc, char **argv) {
 
   std::vector<VRDisplayDevice*> windows = displayFactories[0]->create(config, "VRDisplayDevices", displayFactories[1]);
 
+  for (int f = 0; f < windows.size(); f++)
+  {
+	  windows[f]->initialize();
+  }
+
   VRInputDevice* inputDevice = inputDeviceFactory->create(config)[0];
 
   VRDataQueue dataQueue;

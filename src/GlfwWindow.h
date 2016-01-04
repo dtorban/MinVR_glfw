@@ -11,6 +11,7 @@
 
 #include "display/VRDisplayDevice.h"
 #include <GLFW/glfw3.h>
+#include "GlfwInputDevice.h"
 
 namespace MinVR {
 
@@ -22,6 +23,7 @@ public:
 	int getWidth();
 	int getHeight();
 
+	void initialize();
 	bool isOpen();
 	void use(const MinVR::VRDisplayAction& action);
 	void finishRendering();
@@ -30,13 +32,20 @@ public:
 		return window;
 	}
 
+	void setInputDevice(GlfwInputDevice* inputDevice) {
+		this->inputDevice = inputDevice;
+	}
+
 	//void addSubDisplay(VRDisplayDevice* display);
+
 
 protected:
 	void startRendering(const MinVR::VRRenderer& renderer, int x);
 
 private:
 	GLFWwindow* window;
+	int x, y, width, height;
+	GlfwInputDevice* inputDevice;
 	//std::vector<VRDisplayDevice*> subDisplays;
 };
 

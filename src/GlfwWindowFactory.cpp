@@ -29,7 +29,7 @@ VRDisplayDevice* GlfwWindowFactory::createDisplay(const std::string type, const 
 		int height = config.getValue("height", name);
 
 		GlfwWindow* window = new GlfwWindow(xOffset, yOffset, width, height);
-		inputDevice->registerGlfwWindow(window);
+		window->setInputDevice(inputDevice);
 
 		return window;
 	}

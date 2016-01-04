@@ -11,16 +11,7 @@
 
 namespace MinVR {
 
-GlfwWindow::GlfwWindow(int x, int y, int width, int height) {
-	window = glfwCreateWindow(width, height, "Simple example", NULL, NULL);
-	if (!window)
-	{
-		std::cout << "Error creating window." << std::endl;
-	}
-	std::cout << "Created window." << std::endl;
-	glfwSetWindowPos(window, x, y);
-	glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+GlfwWindow::GlfwWindow(int x, int y, int width, int height) : x(x), y(y), width(width), height(height), window(NULL) {
 }
 
 GlfwWindow::~GlfwWindow() {
@@ -33,15 +24,29 @@ void GlfwWindow::use(const MinVR::VRDisplayAction& action) {
 }
 
 int GlfwWindow::getWidth() {
-	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	return width;
 }
 
 int GlfwWindow::getHeight() {
-	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 	return height;
+}
+
+void GlfwWindow::initialize() {
+	window = glfwCreateWindow(width, height, "Simple example", NULL, NULL);
+	if (!window)
+	{
+		std::cout << "Error creating window." << std::endl;
+	}
+
+	std::cout << "Created window." << std::endl;
+	glfwSetWindowPos(window, x, y);
+	glfwMakeContextCurrent(window);
+    glfwSwapInterval(1);
+    inputDevice->registerGlfwWindow(window);
+
+    VRDisplayDevice::initialize();
 }
 
 void GlfwWindow::startRendering(const MinVR::VRRenderer& renderer, int x) {
