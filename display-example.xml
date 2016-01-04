@@ -26,6 +26,7 @@
     <width type="int">600</width>
     <height type="int">600</height>
     <stereoFormatter>
+       <!--displayType type="string">quadbufferStereo</DisplayType-->
        <displayType type="string">sideBySideStereo</DisplayType>
        <topViewport>
           <displayType type="string">viewport</DisplayType>

@@ -34,6 +34,13 @@ int GlfwWindow::getHeight() {
 }
 
 void GlfwWindow::initialize() {
+	glfwDefaultWindowHints();
+
+	if (isQuadbuffered())
+	{
+		glfwWindowHint(GLFW_STEREO, true);
+	}
+
 	window = glfwCreateWindow(width, height, "Simple example", NULL, NULL);
 	if (!window)
 	{
