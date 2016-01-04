@@ -47,6 +47,7 @@ int GlfwWindow::getHeight() {
 void GlfwWindow::startRendering(const MinVR::VRRenderer& renderer, int x) {
 	glfwMakeContextCurrent(window);
 	startRenderingAllDisplays(renderer, x);
+	glFlush();
 }
 
 bool GlfwWindow::isOpen() {

@@ -31,14 +31,14 @@
           <displayType type="string">viewport</DisplayType>
 	  <xOffset type="int">0</xOffset>
 	  <yOffset type="int">300</yOffset>
-	  <width type="int">300</width>
+	  <width type="int">600</width>
 	  <height type="int">300</height>
        </topViewport>
        <bottomViewport>
           <displayType type="string">viewport</DisplayType>
 	  <xOffset type="int">0</xOffset>
 	  <yOffset type="int">0</yOffset>
-	  <width type="int">300</width>
+	  <width type="int">600</width>
 	  <height type="int">300</height>
        </bottomViewport>
   </OtherDisplay>

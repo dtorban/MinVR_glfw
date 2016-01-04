@@ -81,6 +81,7 @@ int main(int argc, char **argv) {
   pluginManager.addInterface(dynamic_cast<TestInterface*>(&iface));
   pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_glfw", "MinVR_glfw");
   pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_OpenGL", "MinVR_OpenGL");
+  pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_Threading", "MinVR_Threading");
 
   VRDataIndex config;
   std::string fileName = argv[1];
