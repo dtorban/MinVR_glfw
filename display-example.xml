@@ -6,20 +6,30 @@
 
 <VRPlugins>
     <MinVRDefaultPlugins>
-        <Names type="stringarray">MinVR_glfw@MinVR_OpenGL</Names>
+        <Names type="stringarray">MinVR_glfw@MinVR_OpenGL@MinVR_Threading</Names>
     </MinVRDefaultPlugins>
 </VRPlugins>
 
 <VRDisplayDevices>
   <ThreadedDisplay>
     <displayType type="string">thread_group</DisplayType>
-    <MainDisplay>
+    <Display1>
       <displayType type="string">glfw_display</DisplayType>
-      <xOffset type="int">200</xOffset>
-      <yOffset type="int">200</yOffset>
-      <width type="int">640</width>
-      <height type="int">480</height>
-    </MainDisplay>
+      <xOffset type="int">600</xOffset>
+      <yOffset type="int">0</yOffset>
+      <width type="int">200</width>
+      <height type="int">200</height>
+    </Display1>
+    <Display2>
+      <stereoFormatter>
+	<displayType type="string">sideBySideStereo</DisplayType>
+      </stereoFormatter>
+      <displayType type="string">glfw_display</DisplayType>
+      <xOffset type="int">600</xOffset>
+      <yOffset type="int">250</yOffset>
+      <width type="int">200</width>
+      <height type="int">200</height>
+    </Display2>
   </ThreadedDisplay>
   <MainDisplay>
     <displayType type="string">glfw_display</DisplayType>
