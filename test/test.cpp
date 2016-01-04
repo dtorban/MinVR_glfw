@@ -51,6 +51,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "display/VRRenderer.h"
 #include <sstream>
 #include <fstream>
+#include "display/CompositeDisplay.h"
 
 using namespace MinVR;
 using namespace std;
@@ -87,12 +88,11 @@ int main(int argc, char **argv) {
   std::string fileName = argv[1];
   config.processXMLFile(fileName, "");
 
-  std::vector<VRDisplayDevice*> windows = displayFactories[0]->create(config, "VRDisplayDevices", displayFactories[1]);
+  CompositeDisplayFactory factory(displayFactories);
+  CompositeDisplay display(config, "VRDisplayDevices", &factory);
+  //std::vector<VRDisplayDevice*> windows = displayFactories[0]->create(config, "VRDisplayDevices", displayFactories[1]);
 
-  for (int f = 0; f < windows.size(); f++)
-  {
-	  windows[f]->initialize();
-  }
+  display.initialize();
 
   VRInputDevice* inputDevice = inputDeviceFactory->create(config)[0];
 
@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
 
   bool isRunning = true;
 
-  while (windows[0]->isOpen() && isRunning)
+  while (display.isOpen() && isRunning)
   {
 	  inputDevice->appendNewInputEventsSinceLastCall(dataQueue);
 
@@ -120,10 +120,7 @@ int main(int argc, char **argv) {
 		  dataQueue.pop();
 	  }
 
-	  for (int f = 0; f < windows.size(); f++)
-	  {
-		  windows[f]->render(renderTriangle);
-	  }
+	  display.render(renderTriangle);
   }
 }
 
