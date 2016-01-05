@@ -52,6 +52,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <sstream>
 #include <fstream>
 #include "display/CompositeDisplay.h"
+#ifndef WIN32
+#include <unistd.h>
+#endif
 
 using namespace MinVR;
 using namespace std;
@@ -59,6 +62,7 @@ using namespace std;
 std::vector<VRDisplayDeviceFactory*> displayFactories;
 VRInputDeviceFactory* inputDeviceFactory;
 VRTimer* mainTimer;
+int frame = 0;
 
 class TestInterface : public MinVR::VRPluginInterface {
 public:
@@ -71,6 +75,7 @@ public:
 };
 
 void renderTriangle();
+void setBackground();
 
 int main(int argc, char **argv) {
   cout << "Registering plugins..." << endl;
@@ -103,6 +108,8 @@ int main(int argc, char **argv) {
 
   while (display.isOpen() && isRunning)
   {
+		//usleep(50000);
+	  frame++;
 	  inputDevice->appendNewInputEventsSinceLastCall(dataQueue);
 
 	  while (dataQueue.notEmpty())
@@ -120,8 +127,15 @@ int main(int argc, char **argv) {
 		  dataQueue.pop();
 	  }
 
+	  display.use(setBackground);
+
 	  display.render(renderTriangle);
   }
+}
+
+void setBackground()
+{
+	//glClearColor(frame % 2, 0.0, 0.0, 1.0);
 }
 
 void renderTriangle()

@@ -18,7 +18,7 @@ GlfwWindow::~GlfwWindow() {
 	glfwDestroyWindow(window);
 }
 
-void GlfwWindow::use(const MinVR::VRDisplayAction& action) {
+void GlfwWindow::useDisplay(const MinVR::VRDisplayAction& action) {
 	glfwMakeContextCurrent(window);
 	action.exec();
 }

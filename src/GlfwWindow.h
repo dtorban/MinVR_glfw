@@ -25,7 +25,7 @@ public:
 
 	void initialize();
 	bool isOpen();
-	void use(const MinVR::VRDisplayAction& action);
+	void useDisplay(const MinVR::VRDisplayAction& action);
 	void finishRendering();
 
 	GLFWwindow* getWindow() const {
