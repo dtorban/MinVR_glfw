@@ -29,6 +29,11 @@ VRDisplayDevice* GlfwWindowFactory::createDisplay(const std::string type, const 
 		int height = config.getValue("height", name);
 
 		GlfwWindow* window = new GlfwWindow(xOffset, yOffset, width, height);
+		if (config.exists("allowThreading", name))
+		{
+			int allowThreading = config.getValue("allowThreading", name);
+			window->setAllowThreading(allowThreading == 1);
+		}
 		window->setInputDevice(inputDevice);
 
 		return window;

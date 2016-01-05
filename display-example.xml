@@ -25,11 +25,23 @@
 	<displayType type="string">sideBySideStereo</DisplayType>
       </stereoFormatter>
       <displayType type="string">glfw_display</DisplayType>
+      <allowThreading type="int">1</allowThreading>
       <xOffset type="int">600</xOffset>
       <yOffset type="int">250</yOffset>
       <width type="int">200</width>
       <height type="int">200</height>
     </Display2>
+    <Display3>
+      <stereoFormatter>
+	<displayType type="string">sideBySideStereo</DisplayType>
+      </stereoFormatter>
+      <displayType type="string">glfw_display</DisplayType>
+      <allowThreading type="int">1</allowThreading>
+      <xOffset type="int">600</xOffset>
+      <yOffset type="int">450</yOffset>
+      <width type="int">200</width>
+      <height type="int">200</height>
+    </Display3>
   </ThreadedDisplay>
   <MainDisplay>
     <displayType type="string">glfw_display</DisplayType>

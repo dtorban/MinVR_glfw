@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 
   while (display.isOpen() && isRunning)
   {
-		//usleep(50000);
+		usleep(150000);
 	  frame++;
 	  inputDevice->appendNewInputEventsSinceLastCall(dataQueue);
 
@@ -135,7 +135,7 @@ int main(int argc, char **argv) {
 
 void setBackground()
 {
-	//glClearColor(frame % 2, 0.0, 0.0, 1.0);
+	glClearColor(frame % 2, 0.0, 0.0, 1.0);
 }
 
 void renderTriangle()

@@ -12,6 +12,7 @@
 namespace MinVR {
 
 GlfwWindow::GlfwWindow(int x, int y, int width, int height) : x(x), y(y), width(width), height(height), window(NULL) {
+	setAllowThreading(true);
 }
 
 GlfwWindow::~GlfwWindow() {
