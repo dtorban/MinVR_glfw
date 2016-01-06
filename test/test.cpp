@@ -1,119 +1,99 @@
-/* ================================================================================
-
-This file is part of the MinVR Open Source Project.
-
-File: main.cpp
-
-Original Author(s) of this File:
-	Dan Orban, 2015, University of Minnesota
-
-Author(s) of Significant Updates/Modifications to the File:
-	...
-
------------------------------------------------------------------------------------
-Copyright (c) 2015 Regents of the University of Minnesota
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
-
-* Redistributions in binary form must reproduce the above copyright notice, this
-  list of conditions and the following disclaimer in the documentation and/or
-  other materials provided with the distribution.
-
-* The name of the University of Minnesota, nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-================================================================================ */
-
 #include <iostream>
-#include "plugin/PluginManager.h"
-#include "plugin/PluginInterface.h"
 #include <vector>
 #include <string>
+#include "plugin/PluginManager.h"
+#include "plugin/PluginInterface.h"
 #include "main/VRPluginInterface.h"
-#include "GL/gl.h"
 #include "main/VRTimer.h"
-#include "display/VRRenderer.h"
+#include "display/CompositeDisplay.h"
 #include <sstream>
 #include <fstream>
-#include "display/CompositeDisplay.h"
-#ifndef WIN32
-#include <unistd.h>
-#endif
-
+#include "GL/gl.h"
 using namespace MinVR;
 using namespace std;
 
+/*
+ * Display and device factories retrieved from the interface
+ */
 std::vector<VRDisplayDeviceFactory*> displayFactories;
 VRInputDeviceFactory* inputDeviceFactory;
 VRTimer* mainTimer;
-int frame = 0;
 
-class TestInterface : public MinVR::VRPluginInterface {
+/*
+ * Simple interface for interfacing with MinVR plugins.  It inherits
+ * from VRPluginInterface which defines methods that plugins look for.
+ * It is possible to define custom interfaces as well, but this interface
+ * is specific for the base functionality in MinVR.
+ */
+class SimpleInterface : public MinVR::VRPluginInterface {
 public:
-	TestInterface() {}
-	virtual ~TestInterface() {}
+	SimpleInterface() {}
+	virtual ~SimpleInterface() {}
 
+	// Adds the display factories for all plugins who use this interface
 	void addVRDisplayDeviceFactory(VRDisplayDeviceFactory* factory) {displayFactories.push_back(factory);}
+	// Adds the input device factories for all plugins who use this interface
 	void addVRInputDeviceFactory(VRInputDeviceFactory* factory) { inputDeviceFactory = factory; }
+	// Used for timing (i.e. for animation, etc...)
 	void addVRTimer(VRTimer* timer) { mainTimer = timer; }
 };
 
+/*
+ * Render and update methods
+ */
+void update();
 void renderTriangle();
-void setBackground();
 
+/*
+ * Main functionality
+ */
 int main(int argc, char **argv) {
   cout << "Registering plugins..." << endl;
   cout << "Plugin path: " << PLUGINPATH << endl;
 
-  TestInterface iface;
+  // Declare and initialize interface
+  SimpleInterface iface;
 
+  // Create plugin manager and add the MinVR interface
   PluginManager pluginManager;
-  pluginManager.addInterface(dynamic_cast<TestInterface*>(&iface));
+  pluginManager.addInterface(dynamic_cast<SimpleInterface*>(&iface));
+
+  // Load specific plugins which will initialize and add factories.
+  // This can be defined inside the configuration itself
   pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_glfw", "MinVR_glfw");
   pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_OpenGL", "MinVR_OpenGL");
   pluginManager.loadPlugin(std::string(PLUGINPATH) + "/MinVR_Threading", "MinVR_Threading");
 
+  // Load configuration from file
   VRDataIndex config;
   std::string fileName = argv[1];
   config.processXMLFile(fileName, "");
 
+  // Combine display factories into one factory for simplicity
   CompositeDisplayFactory factory(displayFactories);
-  CompositeDisplay display(config, "VRDisplayDevices", &factory);
-  //std::vector<VRDisplayDevice*> windows = displayFactories[0]->create(config, "VRDisplayDevices", displayFactories[1]);
 
+  // Created the display from the factory (the display is composite,
+  // so it contains multiple displays, but acts like one display)
+  CompositeDisplay display(config, "VRDisplayDevices", &factory);
   display.initialize();
 
+  // Create input device from factory (in this case only glfw keyboard / mouse)
   VRInputDevice* inputDevice = inputDeviceFactory->create(config)[0];
 
+  // Create dataIndex and dataQueue
   VRDataQueue dataQueue;
   VRDataIndex dataIndex;
 
   bool isRunning = true;
 
+  // Loop until escape key is hit or main display is closed
   while (display.isOpen() && isRunning)
   {
-		usleep(150000);
-	  frame++;
+	  // Loop through new events
 	  inputDevice->appendNewInputEventsSinceLastCall(dataQueue);
-
 	  while (dataQueue.notEmpty())
 	  {
+		  // If escape is pressed, exit program
 		  std::string p = dataIndex.addSerializedValue( dataQueue.getSerializedObject() );
 		  if (p == "/keyboard")
 		  {
@@ -127,17 +107,30 @@ int main(int argc, char **argv) {
 		  dataQueue.pop();
 	  }
 
-	  display.use(setBackground);
+	  // Run a function on all contexts (not necessarily displays)
+	  display.use(update);
 
+	  // Render the triangle on all displays (passing render function into display)
+	  // Includes viewports, threading, stereo displays, and custom display types
 	  display.render(renderTriangle);
   }
 }
 
-void setBackground()
+/*
+ * Update vertex arrays, etc...
+ */
+void update()
 {
-	glClearColor(frame % 2, 0.0, 0.0, 1.0);
+	// Example update of a vertex array
+	GLfloat vertices[] = {0,0,0,1,1,1,0,0,0};
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+/*
+ * Renders a triangle
+ */
 void renderTriangle()
 {
 	  float ratio;
