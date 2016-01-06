@@ -8,7 +8,6 @@ if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 set (SOURCEFILES 
-  main.cpp
   src/GlfwInputDevice.cpp
   src/GlfwPlugin.cpp
   src/GlfwTimer.cpp
